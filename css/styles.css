@@ -1,3 +1,28 @@
+/* html {
+    scroll-behavior:smooth
+} */
+
+body {
+    font-size: 16px;
+}
+
 .black-cover {
     display: none;
+}
+
+.active {
+    color: red;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+}
+
+.linked {
+    border: 2px solid green;
+    margin-top: 12rem;
+    padding-bottom: 18rem;
 }
