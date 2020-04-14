@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
 /**
  * End Global Variables
  * Start Helper Functions
@@ -43,16 +44,29 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const scrollTo = (e) => {
-        console.log(e.target)
         e.preventDefault();
         document.querySelector(e.target.getAttribute('href')).scrollIntoView({
             behavior: 'smooth'
         });
+    };
+
+    const checkScrolling = () => {
+        return window.lastScrollTime && new Date().getTime() < window.lastScrollTime + 500;
     }
 
+    const hideNav = () => {
+        if(!checkScrolling){
+            document.querySelector(".dynamic-menu").style.display = "none";
+        }
+        document.querySelector(".dynamic-menu").style.display = "block";
+    }
+
+    let isScrolling = false;
     populateList();
-    document.addEventListener("scroll", function(){
+    window.addEventListener("scroll", function(){
         setActive();
+        window.lastScrollTime = new Date().getTime();
+        hideNav();
     });
 
 
