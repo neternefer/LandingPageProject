@@ -3,19 +3,12 @@
  *
 */
 document.addEventListener("DOMContentLoaded", () => {
-    const menuList = document.getElementById("dynamic-menu-list");
     const linkedSections = document.getElementsByClassName("linked");
-    const headerHeight = 160;
+    const elementsToHide = document.querySelectorAll(".hide-on-scroll");
+    let isScrolling;
 
-
-
-
-/**
- * End Global Variables
- * Start Helper Functions
- *
-*/
     const populateList = () => {
+        const menuList = document.getElementById("dynamic-menu-list");
         for(section of linkedSections) {
             let listElement = `
                 <li><a href="#${section.id}" class="${section.id}">
@@ -23,14 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     </a>
                 </li>`;
             menuList.insertAdjacentHTML("beforeend", listElement);
-            menuList.querySelector(`.${section.id}`).addEventListener("click", scrollTo);
+            menuList.querySelector(`.${section.id}`).addEventListener("click", scrollingTo);
         }
-    }
+    };
 
     const isInViewport = (section) => {
         let sectionPosition = section.getBoundingClientRect();
-        if(sectionPosition.top <= headerHeight + 0.5 &&
-            sectionPosition.bottom >= headerHeight + 0.5) {
+        if(sectionPosition.top < window.innerHeight / 3 &&
+            sectionPosition.bottom > window.innerHeight / 3) {
             return true;
         }
         return false;
@@ -38,69 +31,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const setActive = () => {
         for(section of linkedSections){
-            section.classList.toggle('active', isInViewport(section));
-            document.querySelector(`.${section.id}`).classList.toggle('active', isInViewport(section));
+            section.classList.toggle("active", isInViewport(section));
+            document.querySelector(`.${section.id}`).classList.toggle("active-link", isInViewport(section));
         }
     };
 
-    const scrollTo = (e) => {
+    const scrollingTo = (e) => {
         e.preventDefault();
-        document.querySelector(e.target.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
+        let anchor = document.querySelector(e.currentTarget.getAttribute("href"));
+        // const offset = -120;
+        const offset = -0.4 * window.innerHeight;
+        const y = anchor.getBoundingClientRect().top + offset + window.pageYOffset;
+        console.log(y)
+        window.scrollTo({
+            top: y,
+            behavior: "smooth"
         });
     };
 
     const checkScrolling = () => {
-        return window.lastScrollTime && new Date().getTime() < window.lastScrollTime + 500;
-    }
+        setDisplay(elementsToHide, "block");
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(() => {
+            if(document.querySelector("header").getBoundingClientRect().top !== 0) {
+                setDisplay(elementsToHide, "none");
+            }
+        }, 2250)
+    };
 
-    const hideNav = () => {
-        if(!checkScrolling){
-            document.querySelector(".dynamic-menu").style.display = "none";
+    const scrollPast = () => {
+        const scrollUpArrow = document.getElementById("scroll-up");
+        scrollUpArrow.addEventListener("click", scrollingTo);
+        if(window.pageYOffset > window.innerHeight) {
+            setDisplay([scrollUpArrow], "block");
+        } else {
+            setDisplay([scrollUpArrow], "none");
         }
-        document.querySelector(".dynamic-menu").style.display = "block";
+    };
+
+    const toggleBlackScreen = () => {
+        document.querySelector(".black-cover").classList.remove("visible");
+        setDisplay([document.querySelector(".grid")], "grid");
+    };
+
+    const addListeners = () => {
+        document.querySelector(".black-cover h1").addEventListener("click",
+        () => toggleBlackScreen(".black-cover"));
+        document.querySelector("svg").addEventListener("click",
+        () => toggleSideMenu());
+        document.querySelector(".close").addEventListener("click",
+        () => toggleSideMenu());
+    };
+
+    const setIntroPage = () => {
+        document.querySelector(".black-cover").classList.add("visible");
+        setDisplay([document.querySelector(".grid")], "none");
     }
 
-    let isScrolling = false;
-    populateList();
-    window.addEventListener("scroll", function(){
-        setActive();
-        window.lastScrollTime = new Date().getTime();
-        hideNav();
-    });
+    const showNav = () => {
+        if(document.querySelector("header").getBoundingClientRect.top === 0) {
+            setDisplay(elementsToHide, "block");
+        }
+    }
 
+    const setDisplay = (items, display) => {
+        for(item of items) {
+            item.style.display = `${display}`;
+        }
+    }
 
+    const toggleSideMenu = () => {
+        const sideMenu = document.querySelector(".black-menu");
+        if(sideMenu.style.width === "" || sideMenu.style.width === "0px") {
+            sideMenu.style.width = "100vw";
+        } else {
+            sideMenu.style.width = "0px";
+        }
+    };
 
+    const main = () => {
+        setIntroPage()
+        addListeners();
+        populateList();
+        window.addEventListener("scroll", function(){
+            setActive();
+            checkScrolling();
+            scrollPast();
+        });
+    };
 
+    main();
 
-
-
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- *
-*/
-
-// build the nav
-
-
-// Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- *
-*/
-
-// Build menu
-
-// Scroll to section on link click
-
-// Set sections as active
-})
+});
