@@ -16,4 +16,4 @@ Landing page with dynamically created menu via JavaScript and minimalistic desig
 ## Screenshots
 Intro page             |  Linked sections  
 :-------------------------:|:-------------------------:
-![Intro page](./screenshots/screen1.png)  |  ![Linked sections](.screenshots/screen2.png)   
+![Intro page](./screenshots/screen1.png)  |  ![Linked sections](./screenshots/screen2.png)   
