@@ -8,7 +8,7 @@
 ## General info
 Landing page with dynamically created menu via JavaScript and minimalistic design
 
-##TODO
+## TODO
 - add transforms/transitions for intro screen and side menu
 - experiment with section sizes and find a more precise way of detecting active sections
 - add more pages
@@ -16,4 +16,4 @@ Landing page with dynamically created menu via JavaScript and minimalistic desig
 ## Screenshots
 Intro page             |  Linked sections  |  Side menu
 :-------------------------:|:-------------------------:
-![Intro page](./assets/screenshots/screen1.jpg)  |  ![Linked sections](.assets//screenshots/screen2.jpg)   |  ![Side menu](.assets/screenshots/screen2.jpg)
+![Intro page](./screenshots/screen1.jpg)  |  ![Linked sections](.screenshots/screen2.jpg)   |  ![Side menu](./screenshots/screen2.jpg)
